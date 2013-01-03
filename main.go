@@ -7,10 +7,16 @@ import (
 	"image"
 )
 
+var cleanup []func()
+
 func main() {
 	go ui()
 
 	wde.Run()
+
+	for _, f := range cleanup {
+		f()
+	}
 }
 
 func ui() {
