@@ -13,6 +13,8 @@ var (
 )
 
 func paint(dst *image.RGBA) {
+	paintText(dst)
+
 	bounds := dst.Bounds()
 	draw.Draw(dst, bounds, fade, image.ZP, draw.Over)
 
