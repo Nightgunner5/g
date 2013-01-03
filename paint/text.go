@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	textColor     = image.NewUniform(color.NRGBA{0, 255, 0, 255})
+	textColor     = image.NewUniform(color.NRGBA{0, 255, 0, 128})
 	textBuf       *image.Alpha
 	textBufPrompt *image.Alpha
 	textCtxReg    *freetype.Context

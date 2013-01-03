@@ -35,7 +35,7 @@ func Context(dst *image.Alpha, bold bool) *freetype.Context {
 		c.SetFont(reg)
 	}
 	c.SetFontSize(size)
-	c.SetClip(dst.Bounds().Inset(8))
+	c.SetClip(dst.Bounds())
 	c.SetDst(dst)
 	c.SetSrc(image.Opaque)
 	return c
