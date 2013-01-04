@@ -12,7 +12,7 @@ var (
 )
 
 func paint(dst *image.RGBA) {
-	paintText(dst)
+	paintText(dst, con)
 
 	fade(dst)
 

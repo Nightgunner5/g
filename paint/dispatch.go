@@ -1,6 +1,7 @@
 package paint
 
 import (
+	"github.com/Nightgunner5/g/console"
 	"image"
 	"image/draw"
 	"time"
@@ -17,6 +18,7 @@ var (
 	flush    func(*image.RGBA)
 	viewport *image.RGBA
 	comm     chan signal
+	con      = console.NewConsole()
 )
 
 func Start(f func(*image.RGBA)) {
