@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/Nightgunner5/g/paint"
 	"github.com/skelterjohn/go.wde"
-	_ "github.com/skelterjohn/go.wde/init"
 	"image"
 )
 
