@@ -18,7 +18,7 @@ var (
 	flush    func(*image.RGBA)
 	viewport *image.RGBA
 	comm     chan signal
-	con      = console.NewConsole()
+	con      = console.New()
 )
 
 func Start(f func(*image.RGBA)) {
@@ -62,4 +62,8 @@ func ResetViewport(bounds image.Rectangle) {
 	comm <- signal{
 		reset: &bounds,
 	}
+}
+
+func Typed(key, glyph string) {
+
 }

@@ -41,6 +41,9 @@ func ui() {
 			_ = e
 			return
 
+		case wde.KeyTypedEvent:
+			paint.Typed(e.Key, e.Glyph)
+
 		case wde.ResizeEvent:
 			paint.ResetViewport(w.Screen().Bounds())
 		}
