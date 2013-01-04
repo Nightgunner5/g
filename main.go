@@ -32,6 +32,8 @@ func ui() {
 		screen := w.Screen()
 		screen.CopyRGBA(img, screen.Bounds())
 		w.FlushImage(screen.Bounds())
+	}, func(argv []string) {
+		// TODO
 	})
 	paint.ResetViewport(w.Screen().Bounds())
 

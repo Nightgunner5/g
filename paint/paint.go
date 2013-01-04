@@ -17,8 +17,13 @@ func paint(dst *image.RGBA) {
 	fade(dst)
 
 	bounds := dst.Bounds()
-	bounds.Min.Y = bounds.Max.Y * (frame % (FramesPerSecond * 2)) / FramesPerSecond
-	bounds.Max.Y = bounds.Min.Y + (bounds.Max.Y / FramesPerSecond / 2)
+	bounds.Min.Y = bounds.Max.Y * (frame % (FramesPerSecond * 3)) / (FramesPerSecond * 2)
+	bounds.Max.Y = bounds.Min.Y + (bounds.Max.Y / FramesPerSecond / 4)
+	draw.Draw(dst, bounds, scanline, image.ZP, draw.Over)
+
+	bounds = dst.Bounds()
+	bounds.Min.Y = bounds.Max.Y * (frame % (FramesPerSecond * 5)) / (FramesPerSecond * 2)
+	bounds.Max.Y = bounds.Min.Y + (bounds.Max.Y / FramesPerSecond / 4)
 	draw.Draw(dst, bounds, scanline, image.ZP, draw.Over)
 
 	frame++

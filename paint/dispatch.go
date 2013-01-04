@@ -12,6 +12,7 @@ const FramesPerSecond = 30
 type signal struct {
 	tick  bool
 	reset *image.Rectangle
+	typed *[2]string
 }
 
 var (
@@ -21,8 +22,9 @@ var (
 	con      = console.New()
 )
 
-func Start(f func(*image.RGBA)) {
+func Start(f func(*image.RGBA), e func([]string)) {
 	flush = f
+	con.Exec = e
 	comm = make(chan signal)
 	go dispatch()
 }
@@ -37,6 +39,9 @@ func dispatch() {
 				paint(viewport)
 				flush(viewport)
 			}
+
+		case s.typed != nil:
+			con.Typed((*s.typed)[0], (*s.typed)[1])
 
 		case s.reset != nil:
 			viewport = image.NewRGBA(*s.reset)
@@ -65,5 +70,8 @@ func ResetViewport(bounds image.Rectangle) {
 }
 
 func Typed(key, glyph string) {
-
+	var keyglyph = [2]string{key, glyph}
+	comm <- signal{
+		typed: &keyglyph,
+	}
 }

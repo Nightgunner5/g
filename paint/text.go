@@ -15,6 +15,7 @@ var (
 	textBufRed     *image.Alpha
 	textBufCursor  *image.Alpha
 	textDirty      = true
+	textVersion    uint64
 )
 
 func paintText(dst *image.RGBA, con *console.Console) {
@@ -22,6 +23,11 @@ func paintText(dst *image.RGBA, con *console.Console) {
 		textBufGreen = image.NewAlpha(dst.Bounds())
 		textBufRed = image.NewAlpha(dst.Bounds())
 		textBufCursor = image.NewAlpha(dst.Bounds())
+		textDirty = true
+	}
+
+	if textVersion != con.Version {
+		textVersion = con.Version
 		textDirty = true
 	}
 
