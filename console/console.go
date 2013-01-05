@@ -103,6 +103,20 @@ func (c *Console) Typed(key, glyph string) {
 		return
 	}
 
+	if key == wde.KeyBackspace {
+		if c.InputSpace {
+			c.InputSpace = false
+		} else if len(c.Input) > 0 {
+			i := len(c.Input) - 1
+			c.Input[i].Text = c.Input[i].Text[:len(c.Input[i].Text)-1]
+			if c.Input[i].Text == "" {
+				c.Input = c.Input[:i]
+			}
+		}
+		c.InputVersion++
+		return
+	}
+
 	if c.InputSpace || len(c.Input) == 0 {
 		c.Input = append(c.Input, Word{})
 		c.InputSpace = false
