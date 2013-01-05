@@ -45,62 +45,10 @@ func paintText(dst *image.RGBA, con *console.Console) {
 	if textInputDirty {
 		draw.Draw(textBufInput, textBufInput.Bounds(), image.Transparent, image.ZP, draw.Src)
 		cInput := font.Context(textBufInput, false)
-		if textDirty {
-			draw.Draw(textBufGreen, textBufGreen.Bounds(), image.Transparent, image.ZP, draw.Src)
-			draw.Draw(textBufRed, textBufRed.Bounds(), image.Transparent, image.ZP, draw.Src)
-			cGreen := font.Context(textBufGreen, false)
-			cGreenBold := font.Context(textBufGreen, true)
-			cRed := font.Context(textBufRed, false)
-			cRedBold := font.Context(textBufRed, true)
 
-			pt := font.Start(cGreen)
-			for _, word := range con.Output {
-				if word.IsNewline() {
-					pt = font.NextLine(cGreen, pt)
-				} else {
-					if word.Red {
-						if word.Bold {
-							pt, _ = cRedBold.DrawString(word.Text, pt)
-						} else {
-							pt, _ = cRed.DrawString(word.Text, pt)
-						}
-					} else {
-						if word.Bold {
-							pt, _ = cGreenBold.DrawString(word.Text, pt)
-						} else {
-							pt, _ = cGreen.DrawString(word.Text, pt)
-						}
-					}
-					pt, _ = cGreen.DrawString(" ", pt)
-				}
-			}
+		pt := font.Start(cInput, textBufInput.Bounds().Dy())
+		pt, _ = cInput.DrawString("> ", pt)
 
-			for _, word := range con.Prompt {
-				if word.IsNewline() {
-					pt = font.NextLine(cGreen, pt)
-				} else {
-					if word.Red {
-						if word.Bold {
-							pt, _ = cRedBold.DrawString(word.Text, pt)
-						} else {
-							pt, _ = cRed.DrawString(word.Text, pt)
-						}
-					} else {
-						if word.Bold {
-							pt, _ = cGreenBold.DrawString(word.Text, pt)
-						} else {
-							pt, _ = cGreen.DrawString(word.Text, pt)
-						}
-					}
-					pt, _ = cGreen.DrawString(" ", pt)
-				}
-			}
-			textInputStart = pt
-
-			textDirty = false
-		}
-
-		pt := textInputStart
 		for _, word := range con.Input {
 			pt, _ = cInput.DrawString(word.Text, pt)
 			pt, _ = cInput.DrawString(" ", pt)
@@ -110,6 +58,37 @@ func paintText(dst *image.RGBA, con *console.Console) {
 		font.Context(textBufCursor, true).DrawString("_", pt)
 
 		textInputDirty = false
+
+		if textDirty {
+			draw.Draw(textBufGreen, textBufGreen.Bounds(), image.Transparent, image.ZP, draw.Src)
+			draw.Draw(textBufRed, textBufRed.Bounds(), image.Transparent, image.ZP, draw.Src)
+			cGreen := font.Context(textBufGreen, false)
+			cGreenBold := font.Context(textBufGreen, true)
+			cRed := font.Context(textBufRed, false)
+			cRedBold := font.Context(textBufRed, true)
+
+			for i := len(con.Output) - 1; i >= 0 && pt.Y > 0; i-- {
+				for _, word := range con.Output[i] {
+					if word.Red {
+						if word.Bold {
+							pt, _ = cRedBold.DrawString(word.Text, pt)
+						} else {
+							pt, _ = cRed.DrawString(word.Text, pt)
+						}
+					} else {
+						if word.Bold {
+							pt, _ = cGreenBold.DrawString(word.Text, pt)
+						} else {
+							pt, _ = cGreen.DrawString(word.Text, pt)
+						}
+					}
+					pt, _ = cGreen.DrawString(" ", pt)
+				}
+				pt = font.NextLine(cGreen, pt)
+			}
+
+			textDirty = false
+		}
 	}
 
 	if (frame/FramesPerSecond)%4 == 0 {

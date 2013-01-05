@@ -20,10 +20,9 @@ func must(font *truetype.Font, err error) *truetype.Font {
 }
 
 const (
-	dpi  = 72
-	size = 16
-	left = raster.Fix32(8 << 8)
-	top  = raster.Fix32(8 << 8)
+	dpi   = 72
+	size  = 16
+	inset = raster.Fix32(8 << 8)
 )
 
 func Context(dst *image.Alpha, bold bool) *freetype.Context {
@@ -41,10 +40,10 @@ func Context(dst *image.Alpha, bold bool) *freetype.Context {
 	return c
 }
 
-func Start(c *freetype.Context) raster.Point {
-	return raster.Point{left, top + c.PointToFix32(size)}
+func Start(c *freetype.Context, height int) raster.Point {
+	return raster.Point{inset, raster.Fix32(height<<8) - inset}
 }
 
 func NextLine(c *freetype.Context, pt raster.Point) raster.Point {
-	return raster.Point{left, pt.Y + c.PointToFix32(size*1.5)}
+	return raster.Point{inset, pt.Y - c.PointToFix32(size*1.5)}
 }

@@ -10,20 +10,22 @@ type Word struct {
 	Bold bool
 }
 
-func (w Word) IsNewline() bool {
-	return w.Text == ""
-}
-
-func AppendWords(base []Word, text string, red, bold bool) []Word {
+func AppendWords(base [][]Word, text string, red, bold bool) [][]Word {
 	for _, s := range strings.FieldsFunc(text, func(r rune) bool {
 		return r == ' '
 	}) {
-		for _, word := range strings.Split(s, "\n") {
-			base = append(base, Word{
-				Text: word,
-				Red:  red,
-				Bold: bold,
-			})
+		for i, word := range strings.Split(s, "\n") {
+			if i != 0 {
+				base = append(base, nil)
+			}
+			if word != "" {
+				i := len(base) - 1
+				base[i] = append(base[i], Word{
+					Text: word,
+					Red:  red,
+					Bold: bold,
+				})
+			}
 		}
 	}
 	return base

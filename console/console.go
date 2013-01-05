@@ -7,8 +7,7 @@ import (
 )
 
 type Console struct {
-	Output     []Word
-	Prompt     []Word
+	Output     [][]Word
 	Input      []Word
 	InputSpace bool
 
@@ -20,11 +19,7 @@ type Console struct {
 
 func New() *Console {
 	return &Console{
-		Output: append(AppendWords([]Word{Word{">", false, true}},
-			os.Args[0], false, false), Word{}),
-		Prompt: []Word{
-			Word{">", false, true},
-		},
+		Output:       AppendWords([][]Word{[]Word{Word{">", false, true}}}, os.Args[0]+"\n", false, false),
 		InputSpace:   false,
 		Version:      1,
 		InputVersion: 1,
