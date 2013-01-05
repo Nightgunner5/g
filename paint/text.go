@@ -30,6 +30,7 @@ func paintText(dst *image.RGBA, con *console.Console) {
 		textBufRed = image.NewAlpha(dst.Bounds())
 		textBufInput = image.NewAlpha(dst.Bounds())
 		textBufCursor = image.NewAlpha(dst.Bounds())
+		textInputDirty = true
 		textDirty = true
 	}
 
