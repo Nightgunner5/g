@@ -7,24 +7,32 @@ import (
 )
 
 var (
-	frame    = 0
-	scanline = image.NewUniform(color.NRGBA{0, 255, 0, 64})
+	frame      = 0
+	background *image.RGBA
+	scanline   = image.NewUniform(color.NRGBA{0, 255, 0, 64})
 )
 
 func paint(dst *image.RGBA) {
-	paintText(dst, con)
+	if background == nil || background.Bounds() != dst.Bounds() {
+		background = image.NewRGBA(dst.Bounds())
+	}
 
-	fade(dst)
+	paintText(background, con)
 
-	bounds := dst.Bounds()
+	fade(background)
+
+	bounds := background.Bounds()
 	bounds.Min.Y = bounds.Max.Y * (frame % (FramesPerSecond * 3)) / (FramesPerSecond * 2)
 	bounds.Max.Y = bounds.Min.Y + (bounds.Max.Y / FramesPerSecond / 4)
-	draw.Draw(dst, bounds, scanline, image.ZP, draw.Over)
+	draw.Draw(background, bounds, scanline, image.ZP, draw.Over)
 
-	bounds = dst.Bounds()
+	bounds = background.Bounds()
 	bounds.Min.Y = bounds.Max.Y * (frame % (FramesPerSecond * 5)) / (FramesPerSecond * 2)
 	bounds.Max.Y = bounds.Min.Y + (bounds.Max.Y / FramesPerSecond / 4)
-	draw.Draw(dst, bounds, scanline, image.ZP, draw.Over)
+	draw.Draw(background, bounds, scanline, image.ZP, draw.Over)
+
+	draw.Draw(dst, dst.Bounds(), background, image.ZP, draw.Src)
+	paintClearText(dst)
 
 	frame++
 }

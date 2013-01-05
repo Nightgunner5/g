@@ -12,8 +12,10 @@ type Console struct {
 	Input      []Word
 	InputSpace bool
 
-	Exec    func([]string)
-	Version uint64
+	Exec func([]string)
+
+	Version      uint64
+	InputVersion uint64
 }
 
 func New() *Console {
@@ -23,8 +25,9 @@ func New() *Console {
 		Prompt: []Word{
 			Word{">", false, true},
 		},
-		InputSpace: false,
-		Version:    1,
+		InputSpace:   false,
+		Version:      1,
+		InputVersion: 1,
 	}
 }
 
@@ -87,16 +90,16 @@ func (c *Console) Typed(key, glyph string) {
 		for i, w := range c.Input {
 			argv[i] = w.Text
 		}
-		c.Exec(argv)
+		go c.Exec(argv)
 		c.Input = nil
 		c.InputSpace = false
-		c.Version++
+		c.InputVersion++
 		return
 	}
 
 	if key == wde.KeySpace {
 		c.InputSpace = true
-		c.Version++
+		c.InputVersion++
 		return
 	}
 
@@ -106,5 +109,5 @@ func (c *Console) Typed(key, glyph string) {
 	}
 
 	c.Input[len(c.Input)-1].Text += glyph
-	c.Version++
+	c.InputVersion++
 }

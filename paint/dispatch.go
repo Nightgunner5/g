@@ -10,9 +10,10 @@ import (
 const FramesPerSecond = 30
 
 type signal struct {
-	tick  bool
-	reset *image.Rectangle
-	typed *[2]string
+	tick    bool
+	reset   *image.Rectangle
+	typed   *[2]string
+	console func(*console.Console)
 }
 
 var (
@@ -27,6 +28,12 @@ func Start(f func(*image.RGBA), e func([]string)) {
 	con.Exec = e
 	comm = make(chan signal)
 	go dispatch()
+}
+
+func WithConsole(f func(*console.Console)) {
+	comm <- signal{
+		console: f,
+	}
 }
 
 func dispatch() {
@@ -46,6 +53,9 @@ func dispatch() {
 		case s.reset != nil:
 			viewport = image.NewRGBA(*s.reset)
 			draw.Draw(viewport, viewport.Bounds(), image.Black, image.ZP, draw.Src)
+
+		case s.console != nil:
+			s.console(con)
 		}
 	}
 }
