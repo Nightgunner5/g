@@ -112,6 +112,10 @@ func (c *Console) Typed(key, glyph string) {
 		return
 	}
 
+	if glyph == "" {
+		return
+	}
+
 	if c.InputSpace || len(c.Input) == 0 {
 		c.Input = append(c.Input, Word{})
 		c.InputSpace = false
